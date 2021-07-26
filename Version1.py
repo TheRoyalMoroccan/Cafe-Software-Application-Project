@@ -3,8 +3,8 @@ products_list = ['Latte', 'Cappuccino', 'Tea', 'Espresso', 'Americano']
 
 def main():
     option = int(input('''
-To Exit press: 0
-To Enter press: 1
+[0] To Exit press
+[1] To Enter press
 \nEnter your choice here: '''))
 
     if option == 0:
@@ -17,11 +17,11 @@ To Enter press: 1
 
 def product():
     user_input = int(input('''
-0: To return to the Main Menu
-1: To view the current drinks menu
-2: To update existing drinks menu
-3: To list & replace a drink
-4: To delete a drink
+[0] To return to the Main Menu
+[1] To view the current drinks menu
+[2] To update existing drinks menu
+[3] To list & replace a drink
+[4] To delete a drink
 \nSelect from the options above: '''))
 
     if user_input == 0:

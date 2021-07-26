@@ -1,0 +1,5 @@
+Latte 
+Cappuccino
+Tea
+Espresso
+Americano
