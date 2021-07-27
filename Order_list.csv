@@ -1,0 +1,5 @@
+Customer name,Customer address,Customer phone,Courier,Status,Items
+John,"Unit 2 , 12 Main Street, London,   WH1 2ER'",+44 7457 442458,2,Preparing,"1, 2, 4"
+Aliana,"17 Mill Road,  Enfield,  EN34 6FW",+44 7457 314420,3,Delivery on the way," 6, 5, 1"
+Rumaanah,"93 North Street,  Sheffield,  S78 9WL",+44 7916 026321,6,Delivered,"4, 3, 0"
+Oussama,"9732 Green Lane, Coventry, CV83 6VN'",+44 7523 722156,1,Delivery is on the way,"1, 5, 2"
