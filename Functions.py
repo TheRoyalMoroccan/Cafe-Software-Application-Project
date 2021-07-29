@@ -51,5 +51,10 @@ def delete_index(list_name, deleted_input):
     del list_name[deleted_input]
 
 
+def enumerate_orders(order_goes_here):
+    for key, value in enumerate(order_goes_here):
+        print(key, value)
+
+
 def whitespace():
     print('\n')
