@@ -1,5 +1,6 @@
 import csv
 from Functions import read_csv_file, save_list, append_dict, update_dict, delete_index, enumerate_orders, whitespace
+from pprint import pprint
 
 
 order_list = []
@@ -19,7 +20,7 @@ def main():
         [0] - To save and exit
         [1] - Product options
         [2] - Courier options
-        [3] - Order details""")
+        [3] - Order options""")
 
     option = int(input("""\n\tEnter your choice here: """))
 
@@ -28,7 +29,7 @@ def main():
         save_list('Product_list.csv', product_list)
         save_list('Courier_list.csv', courier_list)
 
-        print('Goodbye')
+        print('\n\tGoodbye')
         exit()
 
     elif option == 1:
@@ -48,11 +49,11 @@ def main():
 def product():
     print('\n\tProduct options')
     print('''
-            [0]: To return to the Main Menu
-            [1]: To view the current drinks menu
-            [2]: To update existing drinks menu
-            [3]: To list & replace a drink
-            [4]: To delete a drink''')
+        [0]: To Return To The Main Menu
+        [1]: To View Beverage List
+        [2]: To Update Existing Drinks Menu
+        [3]: To List & Replace A Drink
+        [4]: To Delete A Drink''')
 
     user_input = int(input('\n\tSelect from the options above: '))
 
@@ -60,13 +61,15 @@ def product():
         main()
 
     elif user_input == 1:
-        print('\n\tHere is the beverage menu : ', product_list)
+        print("\n\tHere's The Beverage List\n\t")
+        pprint(product_list)
 
     elif user_input == 2:
-        print('\n\tHere is the beverage menu : ', product_list)
+        print('\n\tHere Ts The Beverage List\n\t')
+        pprint(product_list)
 
-        new_product = input('\nPlease add a new beverage to the menu : ')
-        new_price = float(input('\nPlease enter desired price: '))
+        new_product = input('\n\tPlease Add A New Beverage To The List : ')
+        new_price = float(input('\n\tPlease Enter Desired Price: '))
 
         new_dict = {}
         new_dict['Name'] = new_product
@@ -75,31 +78,33 @@ def product():
 
         append_dict('Product_list.csv', new_dict, headers)
 
-        print("\n\tYou've added a beverage to the menu:", new_dict)
+        print("\n\tYou've Added A Beverage To The List:", new_dict)
 
     elif user_input == 3:  # Check is \n still needs to be here
-        print('\n\tThe beverage selections are: ', '\n')
+        print('\n\tThe Beverage Selections Are: \n\t')
         enumerate_orders(product_list)
 
-        number_input = int(
-            input('\n\tChoose a beverage by selecting the number to replace with your desired beverage: '))
+        number_input = float(
+            input('\n\tChoose A Number To Replace With Another Beverage: '))
         new_variable = product_list[number_input]
         update_dict(new_variable)
 
-        print("\n\tHere's the new updated beverage menu: ", product_list)
-        product()  # try and fix this
+        print("\n\tHere's The Updated Beverage List:\t\n")
+        pprint(product_list)
+        # product()  # try and fix this
 
     elif user_input == 4:
-        print('\n\tLets delete a beverage')
+        print('\n\tLets delete a beverage\n\t')
         enumerate_orders(product_list)
 
         deleted_input = int(
             input('\n\tSelected a beverage to be deleted by choosing a number: '))
-
+        whitespace()
         delete_index(product_list, deleted_input)
 
-        print("You've deleted a selection: ", product_list)
-        main()
+        print("\n\tYour Chosen Beverage Has Been Deleted\n\t")
+        enumerate_orders(product_list)
+
     else:
         print('Invalid selection')
         product()
@@ -120,10 +125,12 @@ def courier():
         main()
 
     elif user_input == 1:
-        print("\n\tHere's The Courier's List : ", courier_list)
+        print("\n\tHere's The Courier's List\n\t")
+        pprint(courier_list)
 
     elif user_input == 2:
-        print("\n\tHere Is The Courier's List : ", courier_list)
+        print("\n\tHere's The Courier's List\n\t")
+        pprint(courier_list)
 
         courier_name = input('\n\tPlease Add A New Courier : ')
         courier_phone = int(input('\n\tPlease Enter A Phone Number: '))
@@ -135,7 +142,7 @@ def courier():
 
         append_dict('Courier_list.csv', new_dict, headers)
 
-        print("\nYou've added a beverage to the menu:", new_dict)
+        print("\n\tYou've added a beverage to the menu:", new_dict)
 
     elif user_input == 3:  # Check is\n still needs to be here
         print('\nThe Courier List is: ', '\n')
@@ -181,8 +188,9 @@ def order():
         main()
 
     elif user_input == 1:
-        print("\n\tHere's The Order's List : ", order_list)
-
+        # print("\n\tHere's The Order's List : ", order_list)
+        for key, value in enumerate(order_list):
+            print(f'\n\tOrder Number - {key}{value}')
     elif user_input == 2:
         customer_name = input('\n\tPlease Enter Your Name : ')
         customer_address = input('\n\tPlease Enter Your Address: ')
