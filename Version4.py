@@ -63,6 +63,7 @@ def product():
     elif user_input == 1:
         print("\n\tHere's The Beverage List\n\t")
         pprint(product_list)
+        product()
 
     elif user_input == 2:
         print('\n\tHere Ts The Beverage List\n\t')
@@ -79,6 +80,7 @@ def product():
         append_dict('Product_list.csv', new_dict, headers)
 
         print("\n\tYou've Added A Beverage To The List:", new_dict)
+        product()
 
     elif user_input == 3:  # Check is \n still needs to be here
         print('\n\tThe Beverage Selections Are: \n\t')
@@ -91,7 +93,7 @@ def product():
 
         print("\n\tHere's The Updated Beverage List:\t\n")
         pprint(product_list)
-        # product()  # try and fix this
+        product()
 
     elif user_input == 4:
         print('\n\tLets delete a beverage\n\t')
@@ -104,6 +106,7 @@ def product():
 
         print("\n\tYour Chosen Beverage Has Been Deleted\n\t")
         enumerate_orders(product_list)
+        product()
 
     else:
         print('Invalid selection')
@@ -113,11 +116,11 @@ def product():
 def courier():
     print('\n\tCourier Menu')
     print('''
-            [0]: To Return To The Main Menu
-            [1]: To View The Current Courier List
-            [2]: To Add A Courier To The Courier List
-            [3]: To Replace A Courier
-            [4]: To Delete A Courier''')
+        [0]: To Return To The Main Menu
+        [1]: To View The Current Courier List
+        [2]: To Add A Courier To The Courier List
+        [3]: To Replace A Courier
+        [4]: To Delete A Courier''')
 
     user_input = int(input('\n\tSelect From The Options Above: '))
 
@@ -127,6 +130,8 @@ def courier():
     elif user_input == 1:
         print("\n\tHere's The Courier's List\n\t")
         pprint(courier_list)
+
+        courier()
 
     elif user_input == 2:
         print("\n\tHere's The Courier's List\n\t")
@@ -142,45 +147,55 @@ def courier():
 
         append_dict('Courier_list.csv', new_dict, headers)
 
-        print("\n\tYou've added a beverage to the menu:", new_dict)
+        print("\n\tYou've Added A Courier To The List\n\t")
+
+        pprint(new_dict)
+
+        courier()
 
     elif user_input == 3:  # Check is\n still needs to be here
-        print('\nThe Courier List is: ', '\n')
+        print('\n\tThe Courier List is: ', '\n')
 
         enumerate_orders(courier_list)
         number_input = int(
-            input('\nChoose A Courier To Replace: '))
+            input('\n\tChoose A Courier To Replace: '))
 
         new_variable = courier_list[number_input]
         update_dict(new_variable)
 
-        print("\nHere's the new updated beverage menu: ", courier_list)
-        product()  # fix this
+        print("\n\tYou've updated The Courier's List:\n\t")
+        pprint(courier_list)
+
+        courier()
 
     elif user_input == 4:
-        print('\nLets delete a beverage')
+        print('\n\tLets Delete A Courier')
         enumerate_orders(courier_list)
 
         deleted_input = int(
-            input('\nSelected a beverage to be deleted by choosing a number: '))
+            input('\n\tChoose A Courier To Be Deleted: '))
 
         delete_index(courier_list, deleted_input)
 
-        print("You've deleted a selection: ", courier_list)
-        product()
+        print("\n\tYou've deleted a selection:\n\t")
+        pprint(courier_list)
+
+        courier()
     else:
-        print('Invalid selection')
-        product()
+        print('\n\tInvalid selection')
+
+        courier()
 
 
 def order():
     print('\n\tOrder Menu')
     print('''
-            [0]: To Return To The Main Menu
-            [1]: To View The Order List
-            [2]: To Add An Order List
-            [3]: To Replace An Order
-            [4]: To Delete An Order''')
+        [0]: To Return To The Main Menu
+        [1]: To View The Order List
+        [2]: To Add An Order To The List
+        [3]: To Update Order Status
+        [4]: To Update Existing Order
+        [5]: To Delete An Order''')
 
     user_input = int(input('\n\tSelect From The Options Above: '))
 
@@ -188,18 +203,22 @@ def order():
         main()
 
     elif user_input == 1:
-        # print("\n\tHere's The Order's List : ", order_list)
+        print("\n\tHere's The Order's List:")
+
         for key, value in enumerate(order_list):
             print(f'\n\tOrder Number - {key}{value}')
+
+        order()
+
     elif user_input == 2:
         customer_name = input('\n\tPlease Enter Your Name : ')
         customer_address = input('\n\tPlease Enter Your Address: ')
-        customer_phone_number = int(input('\n\tPlease Enter A Phone Number: '))
+        customer_phone_number = int(
+            input('\n\tPlease Enter A Phone Number: \n\t'))
 
-        # WHITESPACE
         enumerate_orders(product_list)
         product_choice = input(
-            '\n\tWhich Product You Want Added To Your Order: ')
+            '\n\tWhich Product Do You Want Added To Your Order: ')
 
         enumerate_orders(courier_list)
         courier_choice = int(
@@ -218,47 +237,64 @@ def order():
 
         append_dict('Order_list.csv', new_dict, headers)
 
-        print("\nYou've Added A New Order: ", new_dict)
+        print("\nYou've Added You're Order: ", new_dict)
 
-    elif user_input == 3:  # Check is\n still needs to be here
+        order()
+
+    elif user_input == 3:
         print('\nThe Orders List is: ', '\n')
 
-        enumerate_orders(order_list)
-        order_input = int(
-            input('\nChoose An Order To Update: '))
+        for key, value in enumerate(order_list):
+            print(f'\n\tOrder Number - {key}{value}')
 
+        order_input = int(
+            input('\n\tChoose An Order To Update: '))
+        whitespace()
         enumerate_orders(order_status)
-        status_input = int(input('\nChoose Status To Update: '))
+        status_input = int(input('\n\tChoose Status To Update: '))
 
         new_variable = order_list[order_input]
-        new_variable['Status'] = order_status[order_input]
+        new_variable['Status'] = order_status[status_input]
 
         print("\nHere's the new updated beverage menu: ", new_variable)
 
+        order()
+
     elif user_input == 4:
-        enumerate_orders(order_list)
-        select_order = int(input('\nChoose An Order: '))
+        print('\n\tLets Update Existing Order\n\t')
+
+        for key, value in enumerate(order_list):
+            print(f'\n\tOrder Number - {key}{value}')
+        select_order = int(input('\n\tChoose An Order: '))
 
         chosen_order = order_list[select_order]
 
         update_dict(chosen_order)
-        print(order_list)
-        main()
+        print("\n\tYou've Updated The Order\n\t")
+        for key, value in enumerate(order_list):
+            print(f'\n\tOrder Number - {key}{value}')
+
+        order()
 
     elif user_input == 5:
         print('\nLets Delete An Order')
-        enumerate_orders(order_list)
+        for key, value in enumerate(order_list):
+            print(f'\n\tOrder Number - {key}{value}')
 
         deleted_input = int(
             input('\nSelect An Order To Delete: '))
 
         delete_index(order_list, deleted_input)
 
-        print("You've deleted a selection: ", order_list)
+        print("You're Order No Longer Exists:\n\t")
+        for key, value in enumerate(order_list):
+            print(f'\n\tOrder Number - {key}{value}')
+
+        order()
     else:
         print('Invalid selection')
         whitespace()
-        product()
+        order()
 
 
 main()
