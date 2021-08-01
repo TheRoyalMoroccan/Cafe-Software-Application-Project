@@ -1,4 +1,7 @@
 import csv
+import pymysql
+import os
+from dotenv import load_dotenv
 
 
 def read_csv_file(file_name, csv_to_read):
@@ -26,11 +29,8 @@ def print_csv_file(file_name, csv_file):
 
 
 def append_dict(file_name, dict_of_elem, field_names):
-    # Open file in append mode
     with open(file_name, 'a+', newline='') as write_obj:
-        # Create a writer object from csv module
         dict_writer = csv.DictWriter(write_obj, fieldnames=field_names)
-        # Add dictionary as wor in the csv
         dict_writer.writerow(dict_of_elem)
 
 
@@ -38,7 +38,7 @@ def update_dict(chosen_item):
     for key, value in chosen_item.items():
 
         chosen_value = input(
-            f'\n{key} Has value of {value}. Enter new value for {key}: ')
+            f'\nThe {key} Category Has Value Of {value}. Enter New Value For {key}: ')
 
         if chosen_value == '':
             chosen_item[key] = value
@@ -58,3 +58,171 @@ def enumerate_orders(order_goes_here):
 
 def whitespace():
     print('\n')
+
+
+def read_courier_from_db():
+
+    load_dotenv()
+    host = os.environ.get("mysql_host")
+    user = os.environ.get("mysql_user")
+    password = os.environ.get("mysql_pass")
+    database = os.environ.get("mysql_db")
+
+    connection = pymysql.connect(
+        host,
+        user,
+        password,
+        database
+    )
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        'SELECT Courier_Id, Courier_Name, Courier_Phone FROM Couriers')
+
+    rows = cursor.fetchall()
+    for row in rows:
+        print(
+            f"\n Courier's ID: {int(row[0])}, Courier's Name: {str(row[1])}, Courier's Phone Number: {row[2]}")
+
+    cursor.close()
+    connection.close()
+
+
+def read_product_from_db():
+
+    load_dotenv()
+    host = os.environ.get("mysql_host")
+    user = os.environ.get("mysql_user")
+    password = os.environ.get("mysql_pass")
+    database = os.environ.get("mysql_db")
+
+    connection = pymysql.connect(
+        host,
+        user,
+        password,
+        database
+    )
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        'SELECT Product_Id, Product_Name, Product_Price FROM Products')
+
+    rows = cursor.fetchall()
+    for row in rows:
+        print(
+            f"\n Product ID: {int(row[0])}, Product Name: {str(row[1])}, Product Price: {float(row[2])}")
+
+    cursor.close()
+    connection.close()
+
+
+def write_into_product_db(new_product, new_price):
+    load_dotenv()
+    host = os.environ.get("mysql_host")
+    user = os.environ.get("mysql_user")
+    password = os.environ.get("mysql_pass")
+    database = os.environ.get("mysql_db")
+
+    connection = pymysql.connect(
+        host,
+        user,
+        password,
+        database
+    )
+
+    cursor = connection.cursor()
+
+    sql = 'INSERT INTO Products (Product_Name, Product_Price) VALUES (%s, %s)'
+    val = [(new_product, new_price)]
+    cursor.executemany(sql, val)
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
+def delete_product_from_db(deleted_product_id):
+    load_dotenv()
+    host = os.environ.get("mysql_host")
+    user = os.environ.get("mysql_user")
+    password = os.environ.get("mysql_pass")
+    database = os.environ.get("mysql_db")
+
+    connection = pymysql.connect(
+        host,
+        user,
+        password,
+        database
+    )
+
+    cursor = connection.cursor()
+    sql = 'DELETE FROM Products WHERE Product_Id = %s'
+    val = [(deleted_product_id)]
+
+    cursor.execute(sql, val)
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
+# def select_row_from_db(product_id):
+#     load_dotenv()
+#     host = os.environ.get("mysql_host")
+#     user = os.environ.get("mysql_user")
+#     password = os.environ.get("mysql_pass")
+#     database = os.environ.get("mysql_db")
+
+#     # Establish a database connection
+#     connection = pymysql.connect(
+#         host,
+#         user,
+#         password,
+#         database
+#     )
+
+#     # A cursor is an object that represents a DB cursor,
+#     # which is used to manage the context of a fetch operation.
+#     cursor = connection.cursor()
+
+#     cursor.execute(
+#         'SELECT Product_Id, Product_Name, Product_Price FROM Products')
+
+#     while True:
+#         row = cursor.fetchone()
+#         if row == None:
+#             break
+#         print(
+#             f'Product ID: {int(row[product_id])}, Product Name: {row[1]}, Product Price: {row[2]}')
+
+#     # Closes the cursor so will be unusable from this point
+#     cursor.close()
+
+#     # Closes the connection to the DB, make sure you ALWAYS do this
+#     connection.close()
+
+# def write_into_courier_db(new_product, new_price):
+#     load_dotenv()
+#     host = os.environ.get("mysql_host")
+#     user = os.environ.get("mysql_user")
+#     password = os.environ.get("mysql_pass")
+#     database = os.environ.get("mysql_db")
+
+#     connection = pymysql.connect(
+#         host,
+#         user,
+#         password,
+#         database
+#     )
+
+#     cursor = connection.cursor()
+
+#     sql = 'INSERT INTO Couriers (Courier_Name, Courier_Phone) VALUES (%s, %s)'
+#     val = [(new_product, new_price)]
+#     cursor.executemany(sql, val)
+
+#     connection.commit()
+#     cursor.close()
+#     connection.close()
