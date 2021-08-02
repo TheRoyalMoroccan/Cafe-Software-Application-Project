@@ -118,6 +118,31 @@ def read_product_from_db():
     connection.close()
 
 
+def write_into_courier_db(new_courier, new_number):
+    load_dotenv()
+    host = os.environ.get("mysql_host")
+    user = os.environ.get("mysql_user")
+    password = os.environ.get("mysql_pass")
+    database = os.environ.get("mysql_db")
+
+    connection = pymysql.connect(
+        host,
+        user,
+        password,
+        database
+    )
+
+    cursor = connection.cursor()
+
+    sql = 'INSERT INTO Couriers (Courier_Name, Courier_Phone) VALUES (%s, %s)'
+    val = [(new_courier, new_number)]
+    cursor.executemany(sql, val)
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
 def write_into_product_db(new_product, new_price):
     load_dotenv()
     host = os.environ.get("mysql_host")
@@ -168,61 +193,110 @@ def delete_product_from_db(deleted_product_id):
     connection.close()
 
 
-# def select_row_from_db(product_id):
-#     load_dotenv()
-#     host = os.environ.get("mysql_host")
-#     user = os.environ.get("mysql_user")
-#     password = os.environ.get("mysql_pass")
-#     database = os.environ.get("mysql_db")
+def delete_courier_from_db(deleted_product_id):
+    load_dotenv()
+    host = os.environ.get("mysql_host")
+    user = os.environ.get("mysql_user")
+    password = os.environ.get("mysql_pass")
+    database = os.environ.get("mysql_db")
 
-#     # Establish a database connection
-#     connection = pymysql.connect(
-#         host,
-#         user,
-#         password,
-#         database
-#     )
+    connection = pymysql.connect(
+        host,
+        user,
+        password,
+        database
+    )
 
-#     # A cursor is an object that represents a DB cursor,
-#     # which is used to manage the context of a fetch operation.
-#     cursor = connection.cursor()
+    cursor = connection.cursor()
+    sql = 'DELETE FROM Couriers WHERE Courier_Id = %s'
+    val = [(deleted_product_id)]
 
-#     cursor.execute(
-#         'SELECT Product_Id, Product_Name, Product_Price FROM Products')
+    cursor.execute(sql, val)
 
-#     while True:
-#         row = cursor.fetchone()
-#         if row == None:
-#             break
-#         print(
-#             f'Product ID: {int(row[product_id])}, Product Name: {row[1]}, Product Price: {row[2]}')
+    connection.commit()
+    cursor.close()
+    connection.close()
 
-#     # Closes the cursor so will be unusable from this point
-#     cursor.close()
 
-#     # Closes the connection to the DB, make sure you ALWAYS do this
-#     connection.close()
+def change_into_product_db(new_product, new_price, product_id):
+    load_dotenv()
+    host = os.environ.get("mysql_host")
+    user = os.environ.get("mysql_user")
+    password = os.environ.get("mysql_pass")
+    database = os.environ.get("mysql_db")
+    connection = pymysql.connect(
+        host,
+        user,
+        password,
+        database
+    )
 
-# def write_into_courier_db(new_product, new_price):
-#     load_dotenv()
-#     host = os.environ.get("mysql_host")
-#     user = os.environ.get("mysql_user")
-#     password = os.environ.get("mysql_pass")
-#     database = os.environ.get("mysql_db")
+    cursor = connection.cursor()
 
-#     connection = pymysql.connect(
-#         host,
-#         user,
-#         password,
-#         database
-#     )
+    if new_product or new_price:
+        sql = 'UPDATE Products SET'
 
-#     cursor = connection.cursor()
+        if new_product and new_price:
+            sql += ' Product_Name = %s, Product_Price = %s WHERE Product_Id = %s'
+            val = (new_product, new_price, product_id)
+            print("\n\tYou've Updated Both Product Name And Price")
 
-#     sql = 'INSERT INTO Couriers (Courier_Name, Courier_Phone) VALUES (%s, %s)'
-#     val = [(new_product, new_price)]
-#     cursor.executemany(sql, val)
+        elif new_product:
+            sql += ' Product_Name = %s WHERE Product_Id = %s'
+            val = (new_product, product_id)
+            print("\n\tYou've Updated The Product Name")
 
-#     connection.commit()
-#     cursor.close()
-#     connection.close()
+        elif new_price:
+            sql += ' Product_Price = %s WHERE Product_Id = %s'
+            val = (new_price, product_id)
+            print("\n\tYou've Updated The Product Price")
+
+        cursor.execute(sql, val)
+        connection.commit()
+    else:
+        print("\n\tNothing's Been Updated")
+
+    cursor.close()
+    connection.close()
+
+
+def change_into_courier_db(new_courier, new_number, courier_id):
+    load_dotenv()
+    host = os.environ.get("mysql_host")
+    user = os.environ.get("mysql_user")
+    password = os.environ.get("mysql_pass")
+    database = os.environ.get("mysql_db")
+    connection = pymysql.connect(
+        host,
+        user,
+        password,
+        database
+    )
+
+    cursor = connection.cursor()
+
+    if new_courier or new_number:
+        sql = 'UPDATE Couriers SET'
+
+        if new_courier and new_number:
+            sql += ' Courier_Name = %s, Courier_Phone = %s WHERE Courier_Id = %s'
+            val = (new_courier, new_number, courier_id)
+            print("\n\tYou've Updated Both Courier Name And Number")
+
+        elif new_courier:
+            sql += ' Courier_Name = %s WHERE Courier_Id = %s'
+            val = (new_courier, courier_id)
+            print("\n\tYou've Updated The Courier Name")
+
+        elif new_number:
+            sql += ' Courier_Phone = %s WHERE Courier_Id= %s'
+            val = (new_number, courier_id)
+            print("\n\tYou've Updated The Courier Number")
+
+        cursor.execute(sql, val)
+        connection.commit()
+    else:
+        print("\n\tNothing's been updated")
+
+    cursor.close()
+    connection.close()

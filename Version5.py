@@ -1,9 +1,5 @@
-import csv
 from Functions import read_csv_file, save_list, append_dict, update_dict, delete_index, enumerate_orders, whitespace
-# adjust_product_table
-from Functions import read_courier_from_db, read_product_from_db, write_into_product_db, delete_product_from_db
-from Scribble import select_row_from_db, change_into_product_db
-from pprint import pprint
+from Functions import read_courier_from_db, read_product_from_db, write_into_product_db, write_into_courier_db, delete_product_from_db, delete_courier_from_db, change_into_product_db, change_into_courier_db
 
 
 order_list = []
@@ -54,9 +50,9 @@ def product():
     print('''
         [0]: To Return To The Main Menu
         [1]: To View Beverage List
-        [2]: To Update Existing Drinks Menu
-        [3]: To List & Replace A Drink
-        [4]: To Delete A Drink''')
+        [2]: To Add A Beverage To The Beverage List
+        [3]: To Alter A Beverage
+        [4]: To Delete A Beverage''')
 
     user_input = int(input('\n\tSelect from the options above: '))
 
@@ -64,6 +60,7 @@ def product():
         main()
 
     elif user_input == 1:
+        print("\n\tHere's The Beverage List\n\t")
         read_product_from_db()
         product()
 
@@ -73,31 +70,21 @@ def product():
         new_product = input('\n\tPlease Add A New Beverage To The List : ')
         new_price = float(input('\n\tPlease Enter Desired Price: '))
         write_into_product_db(new_product, new_price)
-        # read_product_from_db()
+        print("\n\tYou've Added A Beverage To The List\n\t")
+        read_product_from_db()
         product()
 
-    elif user_input == 3:  # Check is \n still needs to be here
+    elif user_input == 3:  # Check if input can be change to int & float
         print('\n\tThe Beverage Selections Are: \n\t')
         read_product_from_db()
-        # enumerate_orders(product_list)
 
         product_id = input('Choose Product ID: ')
         product_name = input('Choose A Product Name: ')
         product_price = input('Choose A Product Price: ')
 
         change_into_product_db(product_name, product_price, product_id)
-
-        # select_row_from_db(product_id)
-
-        #adjust_product_table(product_id, product_name, product_price)
-
-        # number_input = float(
-        #     input('\n\tChoose A Number To Replace With Another Beverage: '))
-        # new_variable = product_list[number_input]
-        # update_dict(new_variable)
-
-        # print("\n\tHere's The Updated Beverage List:\t\n")
-        # pprint(product_list)
+        print("\n\tYou've Updated The Product's List:\n\t")
+        read_product_from_db()
         product()
 
     elif user_input == 4:
@@ -106,14 +93,12 @@ def product():
 
         deleted_input = int(
             input('\n\tSelected a beverage to be deleted by choosing a number: '))
-
         delete_product_from_db(deleted_input)
 
         # whitespace()
-        #delete_index(product_list, deleted_input)
 
         print("\n\tYour Chosen Beverage Has Been Deleted\n\t")
-        # enumerate_orders(product_list)
+        read_product_from_db()
         product()
 
     else:
@@ -127,7 +112,7 @@ def courier():
         [0]: To Return To The Main Menu
         [1]: To View The Current Courier List
         [2]: To Add A Courier To The Courier List
-        [3]: To Replace A Courier
+        [3]: To Alter A Courier
         [4]: To Delete A Courier''')
 
     user_input = int(input('\n\tSelect From The Options Above: '))
@@ -137,57 +122,40 @@ def courier():
 
     elif user_input == 1:
         print("\n\tHere's The Courier's List\n\t")
-        pprint(courier_list)
-
+        read_courier_from_db()
         courier()
 
     elif user_input == 2:
         print("\n\tHere's The Courier's List\n\t")
-        pprint(courier_list)
-
+        read_courier_from_db()
         courier_name = input('\n\tPlease Add A New Courier : ')
-        courier_phone = int(input('\n\tPlease Enter A Phone Number: '))
-
-        new_dict = {}
-        new_dict['Name'] = courier_name
-        new_dict['Phone Number'] = courier_phone
-        headers = ['Name', 'Phone Number']
-
-        append_dict('Courier_list.csv', new_dict, headers)
-
+        courier_phone = input('\n\tPlease Enter A Phone Number: ')
+        write_into_courier_db(courier_name, courier_phone)
         print("\n\tYou've Added A Courier To The List\n\t")
-
-        pprint(new_dict)
-
+        read_courier_from_db()
         courier()
 
     elif user_input == 3:  # Check is\n still needs to be here
         print('\n\tThe Courier List is: ', '\n')
+        read_courier_from_db()
 
-        enumerate_orders(courier_list)
-        number_input = int(
-            input('\n\tChoose A Courier To Replace: '))
+        courier_ID = input('Choose A Courier ID: ')
+        courier_name = input('Choose A New Courier Name: ')
+        courier_number = input('Choose A New Courier Number: ')
 
-        new_variable = courier_list[number_input]
-        update_dict(new_variable)
-
-        print("\n\tYou've updated The Courier's List:\n\t")
-        pprint(courier_list)
-
+        change_into_courier_db(courier_name, courier_number, courier_ID)
+        print("\n\tYou've Updated The Courier's List:\n\t")
+        read_courier_from_db()
         courier()
 
     elif user_input == 4:
         print('\n\tLets Delete A Courier')
-        enumerate_orders(courier_list)
-
+        read_courier_from_db()
         deleted_input = int(
             input('\n\tChoose A Courier To Be Deleted: '))
-
-        delete_index(courier_list, deleted_input)
-
-        print("\n\tYou've deleted a selection:\n\t")
-        pprint(courier_list)
-
+        delete_courier_from_db(deleted_input)
+        print("\n\tYour Chosen Courier Has Been Deleted:\n\t")
+        read_courier_from_db
         courier()
     else:
         print('\n\tInvalid selection')
