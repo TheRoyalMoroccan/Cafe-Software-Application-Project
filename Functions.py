@@ -2,6 +2,7 @@ import csv
 import pymysql
 import os
 from dotenv import load_dotenv
+from prompt_toolkit import print_formatted_text, HTML
 
 
 def read_csv_file(file_name, csv_to_read):
@@ -42,7 +43,8 @@ def update_dict(chosen_item):
 
         if chosen_value == '':
             chosen_item[key] = value
-            print('\nNothing has been changed')
+            print_formatted_text(
+                HTML('\n\t<i><ansicyan>Nothing has been changed</ansicyan></i>'))
         else:
             chosen_item[key] = chosen_value
 
@@ -239,22 +241,30 @@ def change_into_product_db(new_product, new_price, product_id):
         if new_product and new_price:
             sql += ' Product_Name = %s, Product_Price = %s WHERE Product_Id = %s'
             val = (new_product, new_price, product_id)
-            print("\n\tYou've Updated Both Product Name And Price")
+            print_formatted_text(HTML(
+                "\n\t<i><ansimagenta>You've Updated Both Product Name And Price</ansimagenta></i>"))
 
         elif new_product:
             sql += ' Product_Name = %s WHERE Product_Id = %s'
             val = (new_product, product_id)
-            print("\n\tYou've Updated The Product Name")
+            print_formatted_text(HTML(
+                "\n\t<i><ansimagenta>You've Updated The Product Name</ansimagenta></i>"))
+            print_formatted_text(HTML(
+                "\n\t<i><ansimagenta>You've Left The Product Price As It Is</ansimagenta></i>"))
 
         elif new_price:
             sql += ' Product_Price = %s WHERE Product_Id = %s'
             val = (new_price, product_id)
-            print("\n\tYou've Updated The Product Price")
+            print_formatted_text(HTML(
+                "\n\t<i><ansimagenta>You've Updated The Product Price</ansimagenta></i>"))
+            print_formatted_text(HTML(
+                "\n\t<i><ansimagenta>You've Left The Updated Product Name As It Is</ansimagenta></i>"))
 
         cursor.execute(sql, val)
         connection.commit()
     else:
-        print("\n\tNothing's Been Updated")
+        print_formatted_text(
+            HTML("\n\t<i><ansimagenta>You've Changed Nothing</ansimagenta></i>"))
 
     cursor.close()
     connection.close()
@@ -281,22 +291,30 @@ def change_into_courier_db(new_courier, new_number, courier_id):
         if new_courier and new_number:
             sql += ' Courier_Name = %s, Courier_Phone = %s WHERE Courier_Id = %s'
             val = (new_courier, new_number, courier_id)
-            print("\n\tYou've Updated Both Courier Name And Number")
+            print_formatted_text(HTML(
+                "\n\t<i><ansiyellow>You've Updated Both Courier Name And Number</ansiyellow></i>"))
 
         elif new_courier:
             sql += ' Courier_Name = %s WHERE Courier_Id = %s'
             val = (new_courier, courier_id)
-            print("\n\tYou've Updated The Courier Name")
+            print_formatted_text(
+                HTML("\n\t<i><ansiyellow>You've Updated The Courier Name</ansiyellow></i>"))
+            print_formatted_text(
+                HTML("\n\t<i><ansiyellow>You've Left The Courier Number As It Is</ansiyellow></i>"))
 
         elif new_number:
             sql += ' Courier_Phone = %s WHERE Courier_Id= %s'
             val = (new_number, courier_id)
-            print("\n\tYou've Updated The Courier Number")
+            print_formatted_text(HTML(
+                "\n\t<i><ansiyellow>You've Updated The Courier Number</ansiyellow></i>"))
+            print_formatted_text(HTML(
+                "\n\t<i><ansiyellow>You've Left The Courier Name As It Is</ansiyellow></i>"))
 
         cursor.execute(sql, val)
         connection.commit()
     else:
-        print("\n\tNothing's been updated")
+        print_formatted_text(
+            HTML("\n\t<i><ansiyellow>You've Changed Nothing</ansiyellow></i>"))
 
     cursor.close()
     connection.close()
